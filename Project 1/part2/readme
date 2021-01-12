@@ -1,0 +1,110 @@
+To excecute the deliveribles, first set up the vagrant program by running the following command
+from the terminal:
+
+$ vagrant up
+
+Next, ssh into it using:
+
+$ vagrant ssh
+
+Once you're in, navigate to the "src/" folder from the root directory using the cd command. Compile
+all the files using the "$ make" command (run the "$ make clean" command first if this is not your
+first time running the "$ make" command) and then start up the default xv6 shell by running the
+"$ make qemu-nox" command.
+
+Now that we are in the shell, you can run the "test" program created for this assignment using the
+following syntax:
+
+Syntax: test <argument-list> <num-iter>
+<argument-list> : 2 integers (testType and testNumber)
+<testType> : 1(myV2p) or 2(hasPages)
+<testNumber> : 
+    <testType> == 1: 1 - 4
+    <testType> == 2: 1 - 6
+
+
+When this command is run, the process will run one of 10 test. 
+If testType == 1, myV2p() will be called with one of 4 test cases:
+                                    #1: VA in User Space w/ Read Operation
+                                    #2: VA in User Space w/ Write Operation
+                                    #3: VA in Kernel Space w/ Read Operation
+                                    #4: VA in Kernel Space w/ Write Operation
+If testType == 2, hasPages() will be called with one of 6 test cased:
+                                    #1: small local variable of size 10 bytes
+                                    #2: large local variable of size 1000 bytes
+                                    #3: local variable larger that 1 page or 4096 bytes
+                                    #4: small local and dynamic variable of size 10 bytes 
+                                    #5: large dynamic variable of size 1000 bytes
+                                    #6: lager dynamic variable greater that 0x80000000 bytes
+                                    #7: test number grater that 7
+                                    #8: invalid PID
+On additional test for syntax:
+                                    #1: no argument
+
+
+Let's start by running a single tests with testType == 1:
+
+$ test 1 1
+VA:0x3E8 w/ Read --> PA:0xBC0003E8
+
+$ test 1 2
+VA:0x3E8 w/ Read --> PA:0xBC0003E8
+
+$ test 1 3
+Address 0x80000001 Not Readable!
+
+$ test 1 4
+Address 0x80000001 Not Readable!
+
+Let's start by running a single tests with testType == 2:
+
+$ test 2 1
+# of Pages in Different Memory Areas -->
+    Code Pages: 2
+    Stack Pages: 1
+    Heap Pages: 0
+    ...other usefull information will be provided
+
+$ test 2 2
+# of Pages in Different Memory Areas -->
+    Code Pages: 2
+    Stack Pages: 1
+    Heap Pages: 0
+    ...other usefull information will be provided
+
+$ test 2 3
+pid 20 test: trap 14 err 7 on cpu 0 eip 0x357 addr 0x2bfc--kill proc
+
+$ test 2 4
+# of Pages in Different Memory Areas -->
+    Code Pages: 2
+    Stack Pages: 1
+    Heap Pages: 8
+    ...other usefull information will be provided
+
+$ test 2 5
+# of Pages in Different Memory Areas -->
+    Code Pages: 2
+    Stack Pages: 1
+    Heap Pages: 25
+    ...other usefull information will be provided
+
+$ test 2 6
+pid 41 test: trap 14 err 7 on cpu 0 eip 0xb54 addr 0x4004--kill proc
+
+$ test 2 7
+Invalid PID!
+
+$ test 2 8
+Invalid Test #! Enter number b/w 1 and 6 (inclusive).
+
+And the final test for syntax:
+
+$ test
+Invalid Syntax!
+
+
+That's about all you will need to execute the various features implemented in this assignment.
+Feel free to use it as you please!
+
+And don't forget to execute the command "$ logout" to exit from the vagrant environment!

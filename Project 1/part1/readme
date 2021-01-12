@@ -1,0 +1,62 @@
+To excecute the deliveribles of this part, first open up a terminal in a linux environment. Note that
+xv6 was not used for this part. Accordingly, when compiling C files, make sure to disable treating
+warnings as errors if needed.
+
+Compile the program using gcc as follows
+
+$ gcc memLeakTest.c -o memLeakTest
+
+This will create a "memLeakTest" output file which can be use to run the test. To do so, enter the
+name of the program with an integer argument between 1 to 6 (inclusive) to select one of the following 
+tests of memory leaks:
+    1 --> Allocates and frees an integer correctly
+    2 --> Allocates an integer, but doesn't free it (size = 4 bytes)
+    3 --> Allocates a string, but doesn't free it (size = 12 bytes)
+    4 --> Attempts to free an unallocated pointer
+    5 --> Allocates 10 bytes, but terminates before freeing (Hit Ctrl+DC when input is requested)
+    6 --> Child process allocates 10 bytes and exits without freeing. Parent reaps child.
+
+The syntax is as follows: "memLeakTest <test#>"
+
+To start off, let's try running test #1, which is the reference case where an integer of 4 bytes is first
+allocated and then properly freed:
+
+$ ./memLeakTest 1
+$
+
+Next, run test #2, which allocates an integer of 4 bytes, but does not free it:
+
+$ ./memLeakTest 2
+$
+
+In test #3, a string of 12 characters is allocated, but not freed:
+
+$ ./memLeakTest 3
+$
+
+The next test (#4) attempts to free an unallocated pointer. If you compile the C file, this would usually give a
+warning. 
+
+$ ./memLeakTest 4
+$
+
+Test #5 requests user input. Hit Ctrl+C (or Ctrl+D) to terminate the program prematurely.
+
+$ ./memLeakTest 5
+Hit Ctrl+C/Ctrl+D to terminate
+$
+
+Finally, test #6 forks a child process which allocates 10 bytes and exits without freeing it. The parent process
+waits for the child to terminate and then reaps it.
+
+$ ./memLeakTest 6
+$
+
+As seen above, these tests have little to no output. This is because they are implemented to test memory leaks 
+using tools like gdb or valgrind (using the "valgrind --leak-check=yes ./memLeakTest <test#>" command). Use 
+these tools to see the "actual" output of the program (in terms of "memory leak" statistics). Note
+that gdb won't show any indication of a memory leak as it is not a leak detection tool. (The exact use of gdb is
+not shown here as it is a universal debugging tool.)
+
+That's about all you will need to execute the various features implemented in this part of the assignment.
+Feel free to use it as you please!
